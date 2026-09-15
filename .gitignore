@@ -16,7 +16,7 @@ artifacts/*.png
 !artifacts/development_log.md
 
 # Datos locales: no se versionan fuentes operativas
-data/
+/data/
 *.csv
 *.xlsx
 *.parquet
@@ -26,4 +26,3 @@ data/
 .idea/
 .DS_Store
 Thumbs.db
-
