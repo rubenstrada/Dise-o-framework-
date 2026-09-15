@@ -4,27 +4,57 @@
 
 La solución se organiza por capacidades y no alrededor de un único `app.py`. Cada paquete representa una responsabilidad y expone contratos pequeños. `LuminaPipeline` utiliza composición para coordinar objetos; no repite la lógica de los módulos.
 
-## Diagrama de componentes
+## Diagrama de componentes reproducible en GitHub
 
-```text
-FrameworkConfig ──┐
-DatasetContract ──┼──> ReadinessChecker ──> ReadinessResult
-                  │
-                  └──> LuminaPipeline
-                         ├── DataLoader
-                         ├── DataValidator
-                         ├── DataCleaner
-                         ├── DataProfiler
-                         ├── EDAVisualizer
-                         ├── DataPreprocessor
-                         ├── ModelTrainer
-                         ├── ModelEvaluator
-                         └── ReportGenerator
-                                  │
-RunContext <───────────────────────┘
+```mermaid
+flowchart TD
+    A[Configuración YAML] --> B[FrameworkConfig y DatasetContract]
+    B --> C[ReadinessChecker]
+    C -->|Faltan requisitos| D[Estado blocked con causas]
+    C -->|Fuente y columnas confirmadas| E[DataLoader]
+    E --> F[DataValidator]
+    F --> G[DataCleaner]
+    G --> H[DataProfiler]
+    H --> I[EDAVisualizer]
+    H -->|Target y horizonte confirmados| J[DataPreprocessor]
+    J --> K[ModelTrainer]
+    K --> L[ModelEvaluator]
+    I --> M[ReportGenerator]
+    L --> M
+    M --> N[RunContext y artefactos trazables]
 ```
 
-La flecha representa uso o composición, no herencia. Los modelos supervisados pueden intercambiar estimadores compatibles con Scikit-learn sin cambiar la evaluación.
+Las flechas representan el flujo previsto. La rama `blocked` es la salida correcta mientras no existan datos, columnas, target y horizonte confirmados.
+
+## Relaciones de clases
+
+```mermaid
+classDiagram
+    class LuminaPipeline
+    class DataLoader
+    class DataValidator
+    class DataCleaner
+    class DataProfiler
+    class EDAVisualizer
+    class DataPreprocessor
+    class ModelTrainer
+    class ModelEvaluator
+    class ReportGenerator
+    class RunContext
+
+    LuminaPipeline o-- DataLoader
+    LuminaPipeline o-- DataValidator
+    LuminaPipeline o-- DataCleaner
+    LuminaPipeline o-- DataProfiler
+    LuminaPipeline o-- EDAVisualizer
+    LuminaPipeline o-- DataPreprocessor
+    LuminaPipeline o-- ModelTrainer
+    LuminaPipeline o-- ModelEvaluator
+    LuminaPipeline o-- ReportGenerator
+    ReportGenerator --> RunContext
+```
+
+La relación `o--` representa composición, no herencia. Los modelos supervisados pueden intercambiar estimadores compatibles con Scikit-learn sin cambiar la evaluación.
 
 ## Contratos de clases
 
@@ -72,4 +102,3 @@ La flecha representa uso o composición, no herencia. Los modelos supervisados p
 ## Evolución posterior
 
 La siguiente etapa se activa cuando Boreal entregue una fuente y un diccionario aprobados. Entonces se agrega una configuración real, se ejecuta el perfilado y se acuerdan correcciones. El modelado solo inicia después de cerrar la unidad de observación, la etiqueta, la fecha de corte, el horizonte y la métrica de negocio.
-

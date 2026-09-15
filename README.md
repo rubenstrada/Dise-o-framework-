@@ -33,7 +33,10 @@ lumina_avance_2/
 │   └── config.example.yaml
 ├── docs/
 │   ├── arquitectura.md
+│   ├── images/
 │   └── requisitos_de_datos.md
+├── scripts/
+│   └── generate_visuals.py
 ├── src/lumina_framework/
 │   ├── core/
 │   ├── data/
@@ -54,9 +57,19 @@ La agrupación es por capacidad. `cli.py` solo recibe argumentos e inicia el dia
 
 ![Arquitectura preliminar del framework](docs/images/arquitectura_framework.png)
 
-El diagrama completo de clases, contratos, entradas y salidas se encuentra en [`docs/arquitectura.md`](docs/arquitectura.md).
+Las figuras no se insertaron manualmente ni se generaron con datos ficticios. El archivo [`scripts/generate_visuals.py`](scripts/generate_visuals.py) utiliza Matplotlib y `matplotlib.patches` para construirlas. Pueden reproducirse con:
+
+```powershell
+python scripts/generate_visuals.py
+```
+
+El diagrama completo de clases, contratos, entradas y salidas se encuentra en [`docs/arquitectura.md`](docs/arquitectura.md). Ese archivo también contiene diagramas Mermaid cuyo código fuente es visible y renderizable directamente por GitHub.
 
 ![Mapa de clases y responsabilidades](docs/images/mapa_clases.png)
+
+Los siguientes bocetos representan las gráficas que serían necesarias cuando existan campos confirmados. No contienen observaciones de Lumina.
+
+![Visualizaciones exploratorias propuestas](docs/images/visualizaciones_propuestas.png)
 
 ## Componentes
 

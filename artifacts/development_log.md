@@ -60,9 +60,18 @@
 
 ## Task 8 Verificación y preparación del entregable
 
-- Regresión final del proyecto: `23 passed in 28.98s`.
+- Regresión del proyecto antes de publicar el generador visual: `23 passed`.
 - `compileall` terminó sin errores de sintaxis en `src/`.
 - La CLI conservó el estado `blocked` con los cuatro prerrequisitos faltantes.
 - Se generaron tres visuales propios y se corrigió la legibilidad del diagrama principal después de inspeccionarlo.
 - El documento se convirtió con Microsoft Word a un PDF de 19 páginas y se revisó visualmente página por página.
 - El ZIP final excluye `.venv`, cachés, archivos compilados y metadatos de instalación.
+
+## Task 9 Visuales reproducibles y evidencia en GitHub
+
+- Prueba RED: el test del generador falló porque `scripts/generate_visuals.py` todavía no existía.
+- Implementación: se añadió un script comentado con Matplotlib y `matplotlib.patches` que genera arquitectura, mapa de clases y bocetos exploratorios.
+- Prueba GREEN: el generador creó los tres PNG en una carpeta temporal y validó firma y tamaño de cada archivo.
+- GitHub: `docs/arquitectura.md` incorpora diagramas Mermaid cuyo código fuente puede revisarse junto con el resultado renderizado.
+- Alcance conservado: los bocetos no contienen observaciones, escalas ni resultados atribuidos a Lumina.
+- Regresión final: `24 passed`.

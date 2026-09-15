@@ -47,7 +47,7 @@ plan de exploración cuando todavía no hay datos, por lo que se eligió esa ví
 
 ## Evidencia real
 
-- Hay 23 pruebas automatizadas aprobadas.
+- Hay 24 pruebas automatizadas aprobadas, incluida la reproducción de los tres visuales.
 - Se detectó una inconsistencia entre el diagrama y el contrato respecto al
   horizonte. Primero se añadió una prueba que falló y después se corrigió el
   contrato, el YAML y el `ReadinessChecker`.
