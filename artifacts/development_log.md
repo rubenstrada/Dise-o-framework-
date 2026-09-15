@@ -73,5 +73,6 @@
 - Implementación: se añadió un script comentado con Matplotlib y `matplotlib.patches` que genera arquitectura, mapa de clases y bocetos exploratorios.
 - Prueba GREEN: el generador creó los tres PNG en una carpeta temporal y validó firma y tamaño de cada archivo.
 - GitHub: `docs/arquitectura.md` incorpora diagramas Mermaid cuyo código fuente puede revisarse junto con el resultado renderizado.
+- Presentación final: el README usa Mermaid directamente y los PNG generados se mantienen fuera del control de versiones para que la evidencia principal sea el código reproducible.
 - Alcance conservado: los bocetos no contienen observaciones, escalas ni resultados atribuidos a Lumina.
 - Regresión final: `24 passed`.

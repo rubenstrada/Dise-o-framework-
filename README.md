@@ -33,7 +33,6 @@ lumina_avance_2/
 │   └── config.example.yaml
 ├── docs/
 │   ├── arquitectura.md
-│   ├── images/
 │   └── requisitos_de_datos.md
 ├── scripts/
 │   └── generate_visuals.py
@@ -53,23 +52,45 @@ lumina_avance_2/
 
 La agrupación es por capacidad. `cli.py` solo recibe argumentos e inicia el diagnóstico; no contiene reglas de datos, gráficas ni modelos.
 
-## Arquitectura visual
+## Arquitectura
 
-![Arquitectura preliminar del framework](docs/images/arquitectura_framework.png)
+Este diagrama está escrito con Mermaid dentro del README. GitHub interpreta el código y lo renderiza; no es una imagen insertada.
 
-Las figuras no se insertaron manualmente ni se generaron con datos ficticios. El archivo [`scripts/generate_visuals.py`](scripts/generate_visuals.py) utiliza Matplotlib y `matplotlib.patches` para construirlas. Pueden reproducirse con:
+```mermaid
+flowchart TD
+    A[Configuración YAML] --> B[FrameworkConfig y DatasetContract]
+    B --> C[ReadinessChecker]
+    C -->|Faltan requisitos| D[Estado blocked con causas]
+    C -->|Fuente y columnas confirmadas| E[DataLoader]
+    E --> F[DataValidator]
+    F --> G[DataCleaner]
+    G --> H[DataProfiler]
+    H --> I[EDAVisualizer]
+    H -->|Target y horizonte confirmados| J[DataPreprocessor]
+    J --> K[ModelTrainer]
+    K --> L[ModelEvaluator]
+    I --> M[ReportGenerator]
+    L --> M
+    M --> N[RunContext y artefactos trazables]
+```
+
+El detalle de clases, contratos, entradas y salidas se encuentra en [`docs/arquitectura.md`](docs/arquitectura.md), también escrito con Mermaid y tablas Markdown.
+
+## Visualizaciones exploratorias previstas
+
+Todavía no se pueden construir gráficas de Lumina porque el caso no incluye observaciones ni nombres de columnas. Cuando exista un contrato de datos confirmado, el módulo `EDAVisualizer` podrá generar:
+
+| Visualización | Campos requeridos | Pregunta que responde |
+|---|---|---|
+| Serie temporal | Fecha y variable numérica | ¿Cómo cambia la variable a lo largo del tiempo? |
+| Mapa de calor agregado | Dos dimensiones categóricas y una medida | ¿Qué segmentos concentran los valores altos o bajos? |
+| Distribución y atípicos | Variable numérica y grupo opcional | ¿Existen dispersión, asimetría o valores que requieran revisión? |
+
+El archivo [`scripts/generate_visuals.py`](scripts/generate_visuals.py) contiene el código Matplotlib usado para generar localmente los diagramas del documento. Los PNG resultantes no se versionan en GitHub y pueden reproducirse con:
 
 ```powershell
 python scripts/generate_visuals.py
 ```
-
-El diagrama completo de clases, contratos, entradas y salidas se encuentra en [`docs/arquitectura.md`](docs/arquitectura.md). Ese archivo también contiene diagramas Mermaid cuyo código fuente es visible y renderizable directamente por GitHub.
-
-![Mapa de clases y responsabilidades](docs/images/mapa_clases.png)
-
-Los siguientes bocetos representan las gráficas que serían necesarias cuando existan campos confirmados. No contienen observaciones de Lumina.
-
-![Visualizaciones exploratorias propuestas](docs/images/visualizaciones_propuestas.png)
 
 ## Componentes
 
