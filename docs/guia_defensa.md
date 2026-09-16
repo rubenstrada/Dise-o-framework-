@@ -47,12 +47,15 @@ plan de exploración cuando todavía no hay datos, por lo que se eligió esa ví
 
 ## Evidencia real
 
-- Hay 24 pruebas automatizadas aprobadas, incluida la reproducción de los tres visuales.
+- Hay 24 pruebas automatizadas aprobadas, incluida la comprobación del generador visual complementario.
 - Se detectó una inconsistencia entre el diagrama y el contrato respecto al
   horizonte. Primero se añadió una prueba que falló y después se corrigió el
   contrato, el YAML y el `ReadinessChecker`.
-- Las figuras del documento son diagramas y bocetos conceptuales, no resultados
-  empresariales.
+- El informe final no incluye imágenes: la arquitectura, las clases y las
+  visualizaciones propuestas se explican con tablas. Los diagramas Mermaid y
+  el generador Matplotlib permanecen en GitHub como evidencia técnica.
+- `DataProfiler` puede describir un `DataFrame` autorizado sin exigir target;
+  el significado de las columnas se valida después con el diccionario.
 
 ## Preguntas probables
 

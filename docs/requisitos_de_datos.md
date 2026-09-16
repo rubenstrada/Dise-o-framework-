@@ -62,18 +62,27 @@ este periodo se confirme; el modelado permanece bloqueado mientras siga vacío.
 
 ## Plan de exploración
 
-Cuando existan fuentes autorizadas se revisará:
+La exploración se ejecutará en dos niveles. El primero es técnico y no requiere conocer el significado de las columnas; el segundo requiere un diccionario aprobado.
 
-1. forma y tipos;
-2. cobertura y continuidad temporal;
-3. faltantes por campo y patrón;
-4. duplicados exactos y de llave;
-5. categorías y cardinalidad;
-6. estadísticos descriptivos;
-7. valores imposibles y atípicos;
-8. integridad entre ventas, devoluciones e inventario;
-9. censura de ventas por desabasto;
-10. tasa base y estabilidad del objetivo propuesto.
+### Nivel 1 perfilado físico genérico
+
+| Revisión | Operación principal | Salida |
+|---|---|---|
+| Forma | `DataFrame.shape` | Número de filas y columnas |
+| Inventario | `columns` y `dtypes` | Nombres y tipos inferidos |
+| Faltantes | `isna().sum()` | Conteo por columna |
+| Duplicados | `duplicated().sum()` | Filas repetidas exactamente |
+| Cardinalidad | `nunique()` | Valores distintos por campo |
+| Numéricos | `select_dtypes()` y `describe()` | Conteo, media, dispersión, cuartiles y extremos |
+| Tamaño en memoria | `memory_usage(deep=True)` | Base para decidir si la carga en memoria sigue siendo adecuada |
+
+Pandas conserva la estructura tabular y los nombres. Cuando se requieran operaciones vectorizadas sobre un bloque numérico, este puede convertirse explícitamente con `to_numpy()`. La conversión no se aplica a toda la tabla porque podría mezclar texto, fechas, identificadores y medidas.
+
+### Nivel 2 validación semántica
+
+Después de recibir el diccionario se revisarán la llave de observación, fechas válidas, unidades, categorías permitidas, valores imposibles, cobertura temporal, relación entre fuentes, censura por desabasto y disponibilidad real de cada predictor.
+
+Solo después de definir una posible variable objetivo se evaluarán su tasa base, estabilidad, horizonte y riesgo de fuga. El detalle técnico se encuentra en [`exploracion_generica.md`](exploracion_generica.md).
 
 ## Visualizaciones previstas
 

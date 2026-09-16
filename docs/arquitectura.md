@@ -26,6 +26,26 @@ flowchart TD
 
 Las flechas representan el flujo previsto. La rama `blocked` es la salida correcta mientras no existan datos, columnas, target y horizonte confirmados.
 
+## Perfilado físico antes del contrato semántico
+
+`DataProfiler` no necesita conocer una etiqueta ni nombres de negocio para describir un `DataFrame` que ya fue autorizado. Su método `profile()` produce forma, tipos físicos, faltantes, duplicados, cardinalidad y estadísticos para las columnas numéricas disponibles.
+
+Este perfilado no equivale a validar el significado de los campos. El flujo completo de `LuminaPipeline.run_profile()` conserva una compuerta más estricta porque valida la fuente contra `DatasetContract`. Mientras no exista ese contrato, el componente puede probarse de forma aislada para reconocimiento técnico, pero el pipeline no presenta el resultado como análisis empresarial.
+
+```mermaid
+flowchart LR
+    A[Fuente autorizada] --> B[DataLoader]
+    B --> C[pandas DataFrame]
+    C --> D[DataProfiler]
+    D --> E[ProfileResult técnico]
+    F[Diccionario aprobado] --> G[DatasetContract]
+    E --> H[Revisión conjunta]
+    G --> H
+    H --> I[EDA y modelado habilitados por etapas]
+```
+
+La separación evita dos errores: interpretar automáticamente un identificador numérico como medida y usar una fecha o variable objetivo que todavía no fue confirmada.
+
 ## Relaciones de clases
 
 ```mermaid

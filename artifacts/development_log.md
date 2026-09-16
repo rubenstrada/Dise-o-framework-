@@ -76,3 +76,11 @@
 - Presentación final: el README usa Mermaid directamente y los PNG generados se mantienen fuera del control de versiones para que la evidencia principal sea el código reproducible.
 - Alcance conservado: los bocetos no contienen observaciones, escalas ni resultados atribuidos a Lumina.
 - Regresión final: `24 passed`.
+
+## Task 10 Exploración genérica sin esquema confirmado
+
+- Se separó el perfilado físico de la interpretación semántica: el primero puede describir cualquier `DataFrame` autorizado; la segunda requiere el diccionario de datos.
+- El README documenta el recorrido `CSV → DataLoader → DataFrame → DataProfiler → ProfileResult → JSON` y muestra el uso directo del perfilador sin definir target.
+- Se explicó por qué Pandas conserva la tabla durante el descubrimiento y por qué NumPy se reserva para bloques numéricos y cálculos vectorizados.
+- No se declaró soporte para grandes volúmenes: la implementación actual trabaja en memoria y solo evolucionará si una prueba real excede la memoria o el tiempo acordado.
+- El informe final sustituyó las imágenes por tablas explicativas. Mermaid y el generador Matplotlib quedan en GitHub como material técnico complementario.
