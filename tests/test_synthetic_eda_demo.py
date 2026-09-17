@@ -16,6 +16,7 @@ from lumina_framework.data import DataProfiler
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT_PATH = PROJECT_ROOT / "scripts" / "run_synthetic_eda_demo.py"
 EXPLORATION_DOC = PROJECT_ROOT / "docs" / "exploracion_sintetica.md"
+README_PATH = PROJECT_ROOT / "README.md"
 
 
 def _load_demo_module():
@@ -31,6 +32,7 @@ def _load_demo_module():
 def test_synthetic_dataset_is_reproducible_and_profileable() -> None:
     """Detecta cambios de semilla, esquema o anomalías controladas."""
     demo = _load_demo_module()
+    assert not hasattr(demo, "_add_synthetic_notice")
 
     first = demo.build_synthetic_dataset(seed=20260916)
     second = demo.build_synthetic_dataset(seed=20260916)
@@ -111,13 +113,10 @@ def test_demo_cli_writes_profile_and_three_visualizations(tmp_path: Path) -> Non
         "max": 68.18,
     }
 
-    warning = (
-        "Dataset sintético utilizado exclusivamente para validar técnicamente "
-        "el funcionamiento del framework. No representa datos de Lúmina Datos "
-        "Operativos, Red Comercial Boreal ni resultados empresariales reales."
-    )
-    assert summary["warning"] == warning
-    assert warning in markdown_path.read_text(encoding="utf-8")
+    assert "warning" not in summary
+    markdown = markdown_path.read_text(encoding="utf-8")
+    assert "Advertencia" not in markdown
+    assert "no representa" not in markdown.casefold()
 
     expected_images = {
         "serie_temporal_demo.png",
@@ -147,7 +146,15 @@ def test_github_exploration_exposes_code_libraries_and_outputs() -> None:
         "evidencia_sintetica/serie_temporal_demo.png",
         "evidencia_sintetica/distribucion_demo.png",
         "evidencia_sintetica/mapa_calor_demo.png",
-        "No se utilizó generación de imágenes mediante inteligencia artificial",
+        "Evolución temporal de la variable",
+        "Distribución de la variable por categoría",
+        "Promedio de la variable por entidad y categoría",
     )
     for fragment in required_fragments:
         assert fragment in content
+
+    assert "Advertencia" not in content
+    assert "no representa" not in content.casefold()
+
+    readme = README_PATH.read_text(encoding="utf-8")
+    assert readme.count("se simularon los datos") == 1

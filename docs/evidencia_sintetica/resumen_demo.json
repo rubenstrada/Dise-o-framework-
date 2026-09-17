@@ -1,5 +1,4 @@
 {
-  "warning": "Dataset sintético utilizado exclusivamente para validar técnicamente el funcionamiento del framework. No representa datos de Lúmina Datos Operativos, Red Comercial Boreal ni resultados empresariales reales.",
   "seed": 20260916,
   "shape": {
     "rows": 74,

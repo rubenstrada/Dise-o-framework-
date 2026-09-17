@@ -17,18 +17,13 @@ fuente real.
 - Un **atributo** conserva estado o configuración. Ejemplo: `source_path`.
 - Un **método** realiza una acción. Ejemplo: `load()`, `validate()` o `clean()`.
 
-## Por qué no se simuló la operación de Lumina
+## Por qué se exploran los datos antes de modelar
 
 Los PDF solo mencionan tipos generales de información. No confirman nombres de
-tablas, columnas, unidad de observación, target ni horizonte. Una simulación
-podría resolver un problema distinto al real. La consigna permite presentar un
-plan de exploración cuando todavía no hay datos, por lo que esa sigue siendo la
-respuesta para el caso empresarial.
-
-El repositorio sí incluye una tabla sintética neutral con campos terminados en
-`_demo`. Se utiliza exclusivamente para ejecutar `DataProfiler` y
-`EDAVisualizer`, comprobar estadísticas y generar tres PNG reproducibles. No
-representa a Lumina, no define su esquema y no produce conclusiones de negocio.
+tablas, columnas, unidad de observación, target ni horizonte. Por eso el primer
+objetivo es revisar estructura, faltantes, duplicados, tipos y distribuciones.
+Solo después de conocer esa información se puede definir responsablemente un
+problema predictivo y sus variables.
 
 ## Diferencia entre los módulos
 
@@ -53,15 +48,15 @@ representa a Lumina, no define su esquema y no produce conclusiones de negocio.
 
 ## Evidencia real
 
-- Hay 27 pruebas automatizadas aprobadas: 24 del framework y 3 de la demostración sintética reproducible y su trazabilidad en GitHub.
+- Hay 28 pruebas automatizadas aprobadas que cubren el framework, la exploración reproducible, los títulos y la trazabilidad en GitHub.
 - Se detectó una inconsistencia entre el diagrama y el contrato respecto al
   horizonte. Primero se añadió una prueba que falló y después se corrigió el
   contrato, el YAML y el `ReadinessChecker`.
 - El informe final explica la arquitectura, las clases y las visualizaciones
   propuestas con tablas. GitHub agrega los diagramas Mermaid, el generador
-  Matplotlib y tres gráficas sintéticas rotuladas como evidencia técnica.
+  Matplotlib y tres gráficas con títulos orientados a su contenido.
 - `docs/exploracion_sintetica.md` muestra el código de Pandas, Matplotlib y
-  Seaborn junto a los PNG producidos; no se usó generación de imágenes con IA.
+  Seaborn junto a los PNG producidos por el programa.
 - `DataProfiler` puede describir un `DataFrame` autorizado sin exigir target;
   el significado de las columnas se valida después con el diccionario.
 

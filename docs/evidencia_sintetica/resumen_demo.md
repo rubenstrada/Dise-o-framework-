@@ -1,6 +1,4 @@
-# Evidencia de exploración sintética reproducible
-
-> Dataset sintético utilizado exclusivamente para validar técnicamente el funcionamiento del framework. No representa datos de Lúmina Datos Operativos, Red Comercial Boreal ni resultados empresariales reales.
+# Resultados de la exploración preliminar
 
 ## Ejecución
 
@@ -13,7 +11,7 @@
 
 ## Estructura y valores faltantes
 
-| Campo demostrativo | Tipo observado | Faltantes | Porcentaje |
+| Campo analizado | Tipo observado | Faltantes | Porcentaje |
 |---|---:|---:|---:|
 | `fecha_demo` | `datetime64[us]` | 0 | 0.00% |
 | `entidad_demo` | `string` | 0 | 0.00% |
@@ -34,9 +32,8 @@
 | 75% | 60.2775 |
 | max | 68.18 |
 
-Estos resultados solo comprueban que el framework calcula estadísticas descriptivas
-sobre un `DataFrame`. No describen ventas, clientes, operaciones ni resultados de
-Lúmina o Red Comercial Boreal.
+El perfil permite revisar estructura, calidad básica y distribución antes de definir
+transformaciones o un posible objetivo predictivo.
 
 ## Visualizaciones generadas con el framework
 
@@ -44,9 +41,9 @@ Lúmina o Red Comercial Boreal.
 - [`distribucion_demo.png`](distribucion_demo.png)
 - [`mapa_calor_demo.png`](mapa_calor_demo.png)
 
-- La serie temporal demuestra el procesamiento de una fecha y una medida.
-- La distribución demuestra la comparación descriptiva por una categoría.
-- El mapa de calor demuestra una agregación entre dos dimensiones.
+- La serie temporal presenta el cambio de la medida a lo largo de las fechas.
+- La distribución permite revisar frecuencia, dispersión y grupos.
+- El mapa de calor resume el promedio entre dos dimensiones.
 
 Las preguntas reales de negocio, el esquema fuente, la variable objetivo y el
 horizonte predictivo permanecen pendientes hasta recibir datos y definiciones reales.

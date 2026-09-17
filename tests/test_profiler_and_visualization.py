@@ -59,3 +59,32 @@ def test_visualizer_creates_three_figures_without_mutating_input(
         heatmap_path,
     ))
     pd.testing.assert_frame_equal(frame, original)
+
+
+def test_visualizer_uses_titles_that_communicate_chart_purpose(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Evita que advertencias o etiquetas técnicas sustituyan el mensaje visual."""
+    captured_titles: list[str] = []
+    monkeypatch.setattr(
+        "lumina_framework.visualization.eda.plt.title",
+        captured_titles.append,
+    )
+    frame = _technical_fixture()
+    visualizer = EDAVisualizer(tmp_path)
+
+    visualizer.plot_time_series(frame, "fecha", "valor")
+    visualizer.plot_distribution(frame, "valor", "grupo")
+    visualizer.plot_heatmap(
+        frame,
+        row_column="grupo",
+        column_column="segmento",
+        value_column="valor",
+    )
+
+    assert captured_titles == [
+        "Evolución temporal de la variable",
+        "Distribución de la variable por categoría",
+        "Promedio de la variable por entidad y categoría",
+    ]

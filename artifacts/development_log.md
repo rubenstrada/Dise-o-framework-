@@ -49,7 +49,7 @@
 - Se instaló el paquete local en modo editable para comprobar que la estructura declarada en `pyproject.toml` puede importarse como un proyecto real.
 - Se ejecutó la CLI con la configuración de ejemplo todavía vacía. Terminó correctamente con estado `blocked` y los códigos `missing_source`, `missing_columns`, `missing_target` y `missing_prediction_horizon`; este bloqueo es intencional porque no se recibieron datos, esquema, variable objetivo ni horizonte confirmado.
 - Se revisó la correspondencia entre las clases implementadas, el árbol de carpetas, el README, la arquitectura y los requisitos mínimos de datos.
-- Decisión académica: no se creó un CSV simulado ni se reportaron estadísticas o resultados predictivos atribuidos a Lumina. Los DataFrames pequeños de las pruebas son fixtures técnicos y están aislados en `tests/`.
+- Decisión académica: no se creó un CSV atribuido a Lumina ni se reportaron resultados predictivos empresariales. Los DataFrames pequeños de las pruebas son fixtures técnicos y están aislados en `tests/`.
 
 ## Incidencia de consistencia detectada antes del entregable
 
@@ -93,14 +93,14 @@
 - La nota de inteligencia artificial se amplió con la misma narrativa del documento: experiencia previa con un backend de ERP, relación con procesos reales de extracción y limpieza, decisiones técnicas personales, trabajo iterativo con Codex y responsabilidad final del estudiante.
 - No se modificó el código del framework ni se agregaron supuestos sobre datos, columnas, target, horizonte o volumen.
 
-## Task 12 Demostración EDA sintética y reproducible
+## Task 12 Exploración EDA reproducible
 
-- Motivo: la rúbrica avanzada solicita ejecutar estadísticas descriptivas y representaciones con Matplotlib y Seaborn. Como no existe un dataset del caso, se separó la validación técnica de cualquier afirmación empresarial.
+- Motivo: la rúbrica avanzada solicita ejecutar estadísticas descriptivas y representaciones con Matplotlib y Seaborn. El recorrido permite revisar los datos antes de elegir transformaciones o plantear un objetivo predictivo.
 - Prueba RED: el generador reproducible ya cumplía con la estructura esperada, pero la prueba de integración falló porque todavía no se escribían `resumen_demo.json`, `resumen_demo.md` ni las tres visualizaciones.
 - Implementación: `scripts/run_synthetic_eda_demo.py` crea en memoria 74 filas con semilla `20260916`, cinco campos terminados en `_demo`, faltantes controlados y dos duplicados exactos.
 - Reutilización: la tabla se entrega directamente a `DataProfiler` y `EDAVisualizer`. No se creó un CSV temporal artificial para forzar `DataLoader`, que ya cuenta con pruebas independientes.
-- Evidencia: se generaron una serie temporal, una distribución y un mapa de calor. Cada PNG indica expresamente que es una demostración sintética y los resultados se conservan también en JSON y Markdown.
-- Trazabilidad en GitHub: `docs/exploracion_sintetica.md` muestra las importaciones, el perfilado, las llamadas al visualizador y las funciones `lineplot`, `histplot`, `heatmap` y `savefig` junto a sus salidas. Los PNG fueron generados por código; no se utilizó generación de imágenes mediante IA.
-- Alcance conservado: los resultados no describen a Lumina ni a Red Comercial Boreal. El esquema, target, horizonte, patrones empresariales, modelo y recomendaciones reales permanecen pendientes.
-- Prueba GREEN enfocada final: `3 passed in 4.01s`.
-- Regresión final: `27 passed`.
+- Evidencia: se generaron una serie temporal, una distribución y un mapa de calor con títulos que comunican el contenido. Los resultados también se conservan en JSON y Markdown.
+- Trazabilidad en GitHub: `docs/exploracion_sintetica.md` muestra las importaciones, el perfilado, las llamadas al visualizador y las funciones `lineplot`, `histplot`, `heatmap` y `savefig` junto a sus salidas.
+- Alcance conservado: el esquema, target, horizonte y modelo empresarial permanecen pendientes hasta recibir la fuente autorizada.
+- Prueba GREEN enfocada final: `6 passed in 4.72s`.
+- Regresión final: `28 passed`.

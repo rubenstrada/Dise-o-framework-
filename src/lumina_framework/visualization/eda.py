@@ -48,7 +48,7 @@ class EDAVisualizer:
         plot_data = plot_data.sort_values(date_column)
         plt.figure(figsize=(8, 4.5))
         sns.lineplot(data=plot_data, x=date_column, y=value_column, marker="o")
-        plt.title("Serie temporal propuesta")
+        plt.title("Evolución temporal de la variable")
         plt.xlabel(date_column)
         plt.ylabel(value_column)
         return self._save("serie_temporal.png")
@@ -74,7 +74,7 @@ class EDAVisualizer:
             kde=True,
             element="step",
         )
-        plt.title("Distribución propuesta")
+        plt.title("Distribución de la variable por categoría")
         plt.xlabel(value_column)
         plt.ylabel("Frecuencia")
         return self._save("distribucion.png")
@@ -99,7 +99,7 @@ class EDAVisualizer:
         )
         plt.figure(figsize=(8, 4.5))
         sns.heatmap(matrix, annot=True, fmt=".2f", cmap="YlGnBu")
-        plt.title("Mapa de calor propuesto")
+        plt.title("Promedio de la variable por entidad y categoría")
         plt.xlabel(column_column)
         plt.ylabel(row_column)
         return self._save("mapa_calor.png")

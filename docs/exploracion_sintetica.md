@@ -1,16 +1,12 @@
-# Exploración sintética ejecutada con Python
+# Exploración preliminar ejecutada con Python
 
-> **Advertencia:** dataset sintético utilizado exclusivamente para validar
-> técnicamente el funcionamiento del framework. No representa datos de Lumina
-> Datos Operativos, Red Comercial Boreal ni resultados empresariales reales.
+Antes de plantear transformaciones o modelos es necesario conocer la estructura,
+calidad y comportamiento de los datos disponibles. Esta página muestra en GitHub la
+secuencia completa entre la tabla analizada, el código y los resultados visuales.
 
-Esta página permite revisar en GitHub la secuencia completa entre datos, código y
-resultado visual. Las figuras no son capturas dibujadas manualmente. Se crearon al
-ejecutar Python sobre el `DataFrame` sintético y se guardaron como PNG para que
-GitHub pueda mostrarlas.
-
-**No se utilizó generación de imágenes mediante inteligencia artificial.** Las
-gráficas son salidas nativas de Matplotlib y Seaborn.
+Las figuras son salidas nativas de Matplotlib y Seaborn guardadas por Python como
+archivos PNG. De esta manera se pueden revisar tanto el código que las construye como
+el resultado de su ejecución.
 
 ## Reproducir la exploración
 
@@ -20,15 +16,15 @@ Desde la raíz del repositorio:
 python scripts/run_synthetic_eda_demo.py
 ```
 
-El script completo y comentado se encuentra en
-[`scripts/run_synthetic_eda_demo.py`](../scripts/run_synthetic_eda_demo.py). La
-implementación reutilizada para las gráficas está en
+El script completo está en
+[`scripts/run_synthetic_eda_demo.py`](../scripts/run_synthetic_eda_demo.py) y la
+implementación del visualizador en
 [`src/lumina_framework/visualization/eda.py`](../src/lumina_framework/visualization/eda.py).
 
-## 1. Generación de la tabla
+## 1. Preparación de la tabla
 
-La semilla fija permite obtener la misma estructura, valores faltantes y duplicados
-en cada ejecución:
+La semilla fija permite repetir la exploración con la misma estructura, faltantes y
+duplicados:
 
 ```python
 from scripts.run_synthetic_eda_demo import build_synthetic_dataset
@@ -39,14 +35,12 @@ print(data.columns.tolist())
 print(data.dtypes)
 ```
 
-Pandas conserva los nombres y tipos de los campos dentro del `DataFrame`. NumPy se
-utiliza dentro del generador para producir valores reproducibles; no se convierte
-toda la tabla en un arreglo que elimine sus etiquetas.
+Pandas conserva los nombres y tipos dentro del `DataFrame`. NumPy se utiliza para los
+cálculos numéricos reproducibles sin eliminar las etiquetas de la tabla.
 
-## 2. Perfilado ejecutado
+## 2. Perfilado
 
-La tabla se entrega al componente real del framework, sin reimplementar manualmente
-los cálculos:
+La tabla se entrega directamente al componente del framework:
 
 ```python
 from lumina_framework.data import DataProfiler
@@ -61,24 +55,23 @@ print(profile.unique_counts)
 print(profile.numeric_statistics)
 ```
 
-Los valores producidos por esa ejecución se guardan automáticamente en dos formatos:
+Los resultados calculados se guardan automáticamente en:
 
-- [`resumen_demo.json`](evidencia_sintetica/resumen_demo.json), para comprobar la
-  estructura calculada por el programa.
-- [`resumen_demo.md`](evidencia_sintetica/resumen_demo.md), para leer en GitHub los
-  faltantes, porcentajes, duplicados y estadísticos descriptivos.
+- [`resumen_demo.json`](evidencia_sintetica/resumen_demo.json), con la estructura
+  completa en formato procesable.
+- [`resumen_demo.md`](evidencia_sintetica/resumen_demo.md), con las tablas de
+  faltantes, duplicados y estadísticos descriptivos.
 
 ## 3. Matplotlib y Seaborn
 
-`EDAVisualizer` importa explícitamente ambas librerías:
+`EDAVisualizer` utiliza explícitamente ambas librerías:
 
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
 ```
 
-La demostración crea el visualizador y ejecuta sus tres métodos sobre el mismo
-`DataFrame` perfilado:
+La exploración ejecuta sus tres métodos sobre el mismo `DataFrame` perfilado:
 
 ```python
 from pathlib import Path
@@ -98,59 +91,58 @@ visualizer.plot_heatmap(
 )
 ```
 
-Dentro del visualizador, Seaborn construye las representaciones estadísticas y
-Matplotlib controla la figura y su exportación:
+Seaborn construye las representaciones estadísticas y Matplotlib controla la figura,
+los títulos y la exportación:
 
 ```python
 sns.lineplot(data=plot_data, x=date_column, y=value_column, marker="o")
 sns.histplot(data=plot_data, x=value_column, hue=group_column, kde=True)
 sns.heatmap(matrix, annot=True, fmt=".2f", cmap="YlGnBu")
 
-plt.tight_layout()
+plt.title("Evolución temporal de la variable")
+plt.title("Distribución de la variable por categoría")
+plt.title("Promedio de la variable por entidad y categoría")
 plt.savefig(path, dpi=160, bbox_inches="tight")
-plt.close()
 ```
 
-| Librería o componente | Uso verificable en esta exploración |
+| Componente | Uso dentro de la exploración |
 |---|---|
 | Pandas | Mantiene la tabla, fechas, categorías, faltantes y duplicados. |
-| NumPy | Genera valores reproducibles mediante una semilla fija. |
+| NumPy | Realiza los cálculos reproducibles. |
 | `DataProfiler` | Calcula estructura, calidad básica y estadísticos. |
-| Seaborn | Construye la serie, el histograma con densidad y el mapa de calor. |
-| Matplotlib | Configura, rotula y guarda cada figura como PNG. |
+| Seaborn | Construye la serie, la distribución y el mapa de calor. |
+| Matplotlib | Configura, titula y guarda cada figura. |
 
-## 4. Salidas generadas por el código
+## 4. Resultados visuales
 
-### Serie temporal
+### Evolución temporal de la variable
 
-![Serie temporal sintética generada con Seaborn y Matplotlib](evidencia_sintetica/serie_temporal_demo.png)
+![Evolución temporal de la variable](evidencia_sintetica/serie_temporal_demo.png)
 
-Comprueba técnicamente que el visualizador puede recibir una fecha y una medida. No
-representa la evolución de una variable real de Lumina.
+La serie permite observar el comportamiento de la medida a lo largo del tiempo.
 
-### Distribución
+### Distribución de la variable por categoría
 
-![Distribución sintética generada con Seaborn y Matplotlib](evidencia_sintetica/distribucion_demo.png)
+![Distribución de la variable por categoría](evidencia_sintetica/distribucion_demo.png)
 
-Comprueba que el visualizador puede construir un histograma y distinguir grupos
-declarados. No demuestra diferencias entre categorías empresariales reales.
+El histograma permite revisar frecuencia, dispersión y diferencias entre grupos.
 
-### Mapa de calor
+### Promedio de la variable por entidad y categoría
 
-![Mapa de calor sintético generado con Seaborn y Matplotlib](evidencia_sintetica/mapa_calor_demo.png)
+![Promedio de la variable por entidad y categoría](evidencia_sintetica/mapa_calor_demo.png)
 
-Comprueba que el visualizador puede agregar una medida entre dos dimensiones. Los
-valores y nombres mostrados pertenecen solamente a la demostración.
+El mapa de calor resume la medida mediante una agregación entre dos dimensiones.
 
 ## Trazabilidad
 
 ```text
 Semilla fija
     ↓
-Pandas DataFrame sintético
+Pandas DataFrame
     ├─→ DataProfiler → JSON y Markdown
     └─→ EDAVisualizer → Seaborn + Matplotlib → tres PNG
 ```
 
-Validar esta ejecución demuestra que el software funciona. La validación del esquema,
-los patrones y las decisiones del negocio sigue requiriendo la fuente real autorizada.
+Esta etapa permite conocer los datos antes de decidir reglas de limpieza,
+transformaciones o un posible objetivo. La validación del problema de negocio sigue
+requiriendo la fuente autorizada, su diccionario y la definición del horizonte.

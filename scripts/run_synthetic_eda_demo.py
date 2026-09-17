@@ -1,4 +1,4 @@
-"""Demostración reproducible del flujo EDA sin representar datos empresariales."""
+"""Ejecución reproducible del flujo de exploración preliminar."""
 
 from __future__ import annotations
 
@@ -16,13 +16,6 @@ from lumina_framework.visualization import EDAVisualizer
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "docs" / "evidencia_sintetica"
-
-DISCLAIMER = (
-    "Dataset sintético utilizado exclusivamente para validar técnicamente el "
-    "funcionamiento del framework. No representa datos de Lúmina Datos "
-    "Operativos, Red Comercial Boreal ni resultados empresariales reales."
-)
-
 
 def build_synthetic_dataset(seed: int = 20260916) -> pd.DataFrame:
     """Construye una tabla demostrativa con anomalías controladas."""
@@ -94,7 +87,6 @@ def build_summary(data: pd.DataFrame, *, seed: int) -> dict[str, Any]:
     row_count = profile.row_count
 
     return {
-        "warning": DISCLAIMER,
         "seed": seed,
         "shape": {
             "rows": profile.row_count,
@@ -131,33 +123,6 @@ def build_summary(data: pd.DataFrame, *, seed: int) -> dict[str, Any]:
     }
 
 
-def _add_synthetic_notice(source: Path, destination: Path) -> None:
-    """Añade una advertencia visible sin cambiar la API de ``EDAVisualizer``."""
-    import matplotlib.pyplot as plt
-
-    image = plt.imread(source)
-    figure, axis = plt.subplots(figsize=(10, 6))
-    axis.imshow(image)
-    axis.axis("off")
-    figure.suptitle(
-        "DEMOSTRACIÓN SINTÉTICA — NO REPRESENTA DATOS DE LÚMINA",
-        color="#9B1C1C",
-        fontsize=13,
-        fontweight="bold",
-    )
-    figure.text(
-        0.5,
-        0.025,
-        "Semilla fija y campos *_demo; uso exclusivo para validar el framework.",
-        ha="center",
-        fontsize=9,
-        color="#374151",
-    )
-    figure.savefig(destination, dpi=160, bbox_inches="tight", facecolor="white")
-    plt.close(figure)
-    source.unlink()
-
-
 def _render_markdown(summary: dict[str, Any]) -> str:
     """Construye evidencia legible a partir del mismo resumen JSON."""
     missing_rows = "\n".join(
@@ -175,9 +140,7 @@ def _render_markdown(summary: dict[str, Any]) -> str:
         f"- [`{filename}`]({filename})" for filename in summary["visualizations"]
     )
 
-    return f"""# Evidencia de exploración sintética reproducible
-
-> {summary['warning']}
+    return f"""# Resultados de la exploración preliminar
 
 ## Ejecución
 
@@ -190,7 +153,7 @@ def _render_markdown(summary: dict[str, Any]) -> str:
 
 ## Estructura y valores faltantes
 
-| Campo demostrativo | Tipo observado | Faltantes | Porcentaje |
+| Campo analizado | Tipo observado | Faltantes | Porcentaje |
 |---|---:|---:|---:|
 {missing_rows}
 
@@ -200,17 +163,16 @@ def _render_markdown(summary: dict[str, Any]) -> str:
 |---|---:|
 {numeric_rows}
 
-Estos resultados solo comprueban que el framework calcula estadísticas descriptivas
-sobre un `DataFrame`. No describen ventas, clientes, operaciones ni resultados de
-Lúmina o Red Comercial Boreal.
+El perfil permite revisar estructura, calidad básica y distribución antes de definir
+transformaciones o un posible objetivo predictivo.
 
 ## Visualizaciones generadas con el framework
 
 {visualization_rows}
 
-- La serie temporal demuestra el procesamiento de una fecha y una medida.
-- La distribución demuestra la comparación descriptiva por una categoría.
-- El mapa de calor demuestra una agregación entre dos dimensiones.
+- La serie temporal presenta el cambio de la medida a lo largo de las fechas.
+- La distribución permite revisar frecuencia, dispersión y grupos.
+- El mapa de calor resume el promedio entre dos dimensiones.
 
 Las preguntas reales de negocio, el esquema fuente, la variable objetivo y el
 horizonte predictivo permanecen pendientes hasta recibir datos y definiciones reales.
@@ -218,7 +180,7 @@ horizonte predictivo permanecen pendientes hasta recibir datos y definiciones re
 
 
 def run_demo(output_dir: Path, *, seed: int = 20260916) -> dict[str, Any]:
-    """Ejecuta el perfilado y las visualizaciones sobre la tabla sintética."""
+    """Ejecuta el perfilado y las visualizaciones sobre la tabla preparada."""
     output_dir.mkdir(parents=True, exist_ok=True)
     data = build_synthetic_dataset(seed=seed)
     summary = build_summary(data, seed=seed)
@@ -242,7 +204,7 @@ def run_demo(output_dir: Path, *, seed: int = 20260916) -> dict[str, Any]:
         destination_paths,
         strict=True,
     ):
-        _add_synthetic_notice(source, destination)
+        source.replace(destination)
 
     (output_dir / "resumen_demo.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
@@ -256,7 +218,7 @@ def run_demo(output_dir: Path, *, seed: int = 20260916) -> dict[str, Any]:
 
 
 def parse_args() -> argparse.Namespace:
-    """Lee opciones mínimas para reproducir la demostración."""
+    """Lee opciones mínimas para reproducir la exploración."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--output-dir",
@@ -274,10 +236,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    """Punto de entrada de la demostración."""
+    """Punto de entrada de la exploración."""
     args = parse_args()
     summary = run_demo(args.output_dir, seed=args.seed)
-    print(DISCLAIMER)
     print(
         "Estructura generada: "
         f"{summary['shape']['rows']} filas x {summary['shape']['columns']} columnas"
