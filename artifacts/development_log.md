@@ -92,3 +92,15 @@
 - GitHub se documentó como medio de entrega del desarrollo técnico y no solo como enlace complementario.
 - La nota de inteligencia artificial se amplió con la misma narrativa del documento: experiencia previa con un backend de ERP, relación con procesos reales de extracción y limpieza, decisiones técnicas personales, trabajo iterativo con Codex y responsabilidad final del estudiante.
 - No se modificó el código del framework ni se agregaron supuestos sobre datos, columnas, target, horizonte o volumen.
+
+## Task 12 Demostración EDA sintética y reproducible
+
+- Motivo: la rúbrica avanzada solicita ejecutar estadísticas descriptivas y representaciones con Matplotlib y Seaborn. Como no existe un dataset del caso, se separó la validación técnica de cualquier afirmación empresarial.
+- Prueba RED: el generador reproducible ya cumplía con la estructura esperada, pero la prueba de integración falló porque todavía no se escribían `resumen_demo.json`, `resumen_demo.md` ni las tres visualizaciones.
+- Implementación: `scripts/run_synthetic_eda_demo.py` crea en memoria 74 filas con semilla `20260916`, cinco campos terminados en `_demo`, faltantes controlados y dos duplicados exactos.
+- Reutilización: la tabla se entrega directamente a `DataProfiler` y `EDAVisualizer`. No se creó un CSV temporal artificial para forzar `DataLoader`, que ya cuenta con pruebas independientes.
+- Evidencia: se generaron una serie temporal, una distribución y un mapa de calor. Cada PNG indica expresamente que es una demostración sintética y los resultados se conservan también en JSON y Markdown.
+- Trazabilidad en GitHub: `docs/exploracion_sintetica.md` muestra las importaciones, el perfilado, las llamadas al visualizador y las funciones `lineplot`, `histplot`, `heatmap` y `savefig` junto a sus salidas. Los PNG fueron generados por código; no se utilizó generación de imágenes mediante IA.
+- Alcance conservado: los resultados no describen a Lumina ni a Red Comercial Boreal. El esquema, target, horizonte, patrones empresariales, modelo y recomendaciones reales permanecen pendientes.
+- Prueba GREEN enfocada final: `3 passed in 4.01s`.
+- Regresión final: `27 passed`.

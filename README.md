@@ -38,8 +38,8 @@ El proyecto no selecciona un algoritmo, no entrena un modelo de Boreal y no dete
 | 5. Librerías | Pandas, NumPy, Matplotlib, Seaborn, scikit-learn, PyYAML, joblib y pytest. | Sección Librerías y `pyproject.toml` |
 | 6. Flujo general | Configuración, diagnóstico, carga, validación, limpieza, perfilado, visualización o modelado y reporte. | Sección Flujo previsto |
 | 7. Calidad | Reutilización, responsabilidades separadas, errores de dominio, trazabilidad, interpretabilidad y prevención de fuga. | Sección Decisiones de calidad y `tests/` |
-| 8. Exploración | Perfilado físico genérico sin inventar columnas ni resultados. | `docs/exploracion_generica.md` |
-| 9. Visualizaciones | Se describen las gráficas necesarias y las preguntas que responderían cuando existan campos confirmados. | Sección Visualizaciones exploratorias previstas |
+| 8. Exploración | Perfilado físico genérico y una ejecución técnica reproducible con campos demostrativos. | `docs/exploracion_generica.md`, `docs/exploracion_sintetica.md` y el resumen generado |
+| 9. Visualizaciones | Se describen las gráficas futuras y se comprueba su generación con una tabla sintética que no representa al negocio. | Secciones Visualizaciones exploratorias previstas y Validación técnica con datos sintéticos |
 | 10. Trabajo propio | Decisiones técnicas, pruebas RED/GREEN, errores corregidos, bitácora y explicación personal. | `artifacts/development_log.md` y `docs/guia_defensa.md` |
 | 11. Uso de IA | Codex se utilizó como apoyo técnico bajo revisión, adaptación y responsabilidad del estudiante. | Sección Uso de inteligencia artificial |
 
@@ -51,11 +51,17 @@ lumina_avance_2/
 │   └── config.example.yaml
 ├── docs/
 │   ├── arquitectura.md
+│   ├── evidencia_sintetica/
+│   │   ├── resumen_demo.json
+│   │   ├── resumen_demo.md
+│   │   └── tres visualizaciones PNG reproducibles
 │   ├── exploracion_generica.md
+│   ├── exploracion_sintetica.md
 │   ├── guia_defensa.md
 │   └── requisitos_de_datos.md
 ├── scripts/
-│   └── generate_visuals.py
+│   ├── generate_visuals.py
+│   └── run_synthetic_eda_demo.py
 ├── src/lumina_framework/
 │   ├── core/
 │   ├── data/
@@ -149,11 +155,100 @@ Todavía no se pueden construir gráficas de Lumina porque el caso no incluye ob
 | Distribución y atípicos | Variable numérica y grupo opcional | ¿Existen dispersión, asimetría o valores que requieran revisión? |
 | Real contra predicción | Fecha, valor real, candidato y baseline | ¿Dónde y cuándo mejora o falla el modelo frente a la referencia? |
 
-El archivo [`scripts/generate_visuals.py`](scripts/generate_visuals.py) conserva un experimento reproducible con Matplotlib. Los PNG resultantes no se versionan ni se incorporan al informe final; el documento académico describe la arquitectura y las propuestas mediante tablas. El script puede ejecutarse con:
+El archivo [`scripts/generate_visuals.py`](scripts/generate_visuals.py) conserva el experimento reproducible usado para los bocetos conceptuales de arquitectura. Los PNG de ese script no se versionan ni se incorporan al informe final; el documento académico describe la arquitectura y las propuestas mediante tablas. El script puede ejecutarse con:
 
 ```powershell
 python scripts/generate_visuals.py
 ```
+
+## Validación técnica con datos sintéticos
+
+Debido a que los materiales del caso no proporcionan un conjunto de datos real de
+Lumina Datos Operativos, la exploración principal continúa considerándose un plan
+técnico. No se presentan estadísticas ni patrones atribuidos a la organización. Para
+comprobar de manera reproducible que las piezas implementadas pueden recibir un
+`DataFrame`, calcular un perfil y producir las visualizaciones previstas, se construyó
+adicionalmente una tabla sintética. Esta tabla no recrea la operación de Lumina ni
+permite resolver anticipadamente un problema de negocio.
+
+> **Advertencia:** dataset sintético utilizado exclusivamente para validar técnicamente el funcionamiento del framework. No representa datos de Lúmina Datos Operativos, Red Comercial Boreal ni resultados empresariales reales.
+
+La ejecución es reproducible mediante una semilla fija y campos terminados en
+`_demo`:
+
+```powershell
+python scripts/run_synthetic_eda_demo.py
+```
+
+El script genera la tabla en memoria y la entrega directamente a `DataProfiler` y
+`EDAVisualizer`. No usa `DataLoader` porque crear y guardar un CSV temporal solo para
+volver a abrirlo no aportaría una validación adicional; el cargador ya tiene pruebas
+independientes con archivos temporales controlados.
+
+La secuencia completa de exploración, con el código de Pandas, Matplotlib y Seaborn
+visible junto a sus resultados, se encuentra en
+[`docs/exploracion_sintetica.md`](docs/exploracion_sintetica.md). Las figuras mostradas
+abajo son archivos producidos por ese código, no capturas manuales ni imágenes
+generadas mediante inteligencia artificial.
+
+### Estructura y resultados obtenidos
+
+| Campo demostrativo | Tipo observado | Faltantes | Cardinalidad no nula |
+|---|---:|---:|---:|
+| `fecha_demo` | fecha | 0 (0.00%) | 24 |
+| `entidad_demo` | texto | 0 (0.00%) | 3 |
+| `categoria_demo` | texto | 3 (4.05%) | 3 |
+| `valor_demo` | numérico | 4 (5.41%) | 66 |
+| `promocion_demo` | booleano | 0 (0.00%) | 2 |
+
+La ejecución produjo 74 filas, 5 columnas y detectó 2 duplicados exactos. Para
+`valor_demo`, Pandas calculó 70 observaciones no nulas, media de `56.843857`,
+desviación estándar de `5.462105`, mínimo de `45.78`, mediana de `57.51` y máximo
+de `68.18`. Estos números validan operaciones del framework; no son indicadores del
+caso empresarial. El detalle completo generado por el mismo script está en
+[`docs/evidencia_sintetica/resumen_demo.md`](docs/evidencia_sintetica/resumen_demo.md)
+y su versión estructurada en
+[`resumen_demo.json`](docs/evidencia_sintetica/resumen_demo.json).
+
+### Visualizaciones generadas
+
+![Serie temporal de demostración](docs/evidencia_sintetica/serie_temporal_demo.png)
+
+![Distribución de demostración](docs/evidencia_sintetica/distribucion_demo.png)
+
+![Mapa de calor de demostración](docs/evidencia_sintetica/mapa_calor_demo.png)
+
+| Evidencia técnica | Pregunta que prueba en la demostración | Pregunta futura con datos reales |
+|---|---|---|
+| Serie temporal | ¿El visualizador procesa una fecha, una medida y faltantes sin modificar la entrada? | ¿Cómo cambia la variable de negocio confirmada a lo largo del tiempo? |
+| Distribución | ¿Puede describir dispersión y comparar categorías declaradas? | ¿Existen asimetrías o valores que deban revisarse por segmento? |
+| Mapa de calor | ¿Puede agregar una medida entre dos dimensiones? | ¿Qué combinaciones reales concentran valores altos o bajos? |
+
+### Relación entre el script y el framework
+
+| Paso | Implementación reutilizada | Salida |
+|---|---|---|
+| Generación controlada | NumPy y Pandas dentro del script | `DataFrame` reproducible con anomalías conocidas |
+| Perfilado | `DataProfiler.profile()` | Estructura, faltantes, duplicados, cardinalidad y estadísticos |
+| Visualización | Tres métodos de `EDAVisualizer` | PNG rotulados explícitamente como sintéticos |
+| Evidencia | Serialización del mismo resumen calculado | JSON y Markdown verificables |
+
+| Capacidad | Datos sintéticos | Datos reales de Lumina |
+|---|---:|---:|
+| Comprobar ejecución del código | Sí | Sí |
+| Comprobar estadísticas descriptivas | Sí | Sí |
+| Comprobar generación de visualizaciones | Sí | Sí |
+| Validar el esquema real del negocio | No | Sí |
+| Identificar patrones empresariales reales | No | Sí |
+| Entrenar un modelo válido para Boreal | No | Sí |
+| Apoyar decisiones empresariales | No | Sí |
+
+La columna de datos reales indica qué podrá validarse cuando la fuente sea recibida y
+autorizada; no significa que esas tareas ya se hayan ejecutado.
+
+La demostración aumenta la evidencia ejecutable del avance, pero no elimina las
+compuertas existentes: el flujo empresarial continúa en estado `blocked` mientras no
+se reciban fuente, esquema, variable objetivo y horizonte confirmados.
 
 ## Componentes
 
@@ -287,7 +382,7 @@ Preferí mantener nombres de columnas, target y horizonte como valores pendiente
 
 El trabajo con Codex fue iterativo: yo definía el comportamiento esperado, revisaba la propuesta o implementación y solicitaba ajustes cuando algo no correspondía con la estructura deseada. Un ejemplo fue el horizonte de predicción. Detecté que aparecía en el diseño, pero no estaba representado consistentemente en el contrato y la configuración. Se añadió una prueba que inicialmente falló y después se corrigieron el contrato, el YAML y el verificador hasta obtener el comportamiento esperado.
 
-La versión actual cuenta con 24 pruebas aprobadas, además de comprobaciones de importación y compilación. La configuración vacía devuelve correctamente un estado `blocked`, lo que demuestra que el framework no intenta continuar cuando faltan una fuente, columnas, target u horizonte.
+La versión actual cuenta con 27 pruebas aprobadas: las 24 pruebas previas del framework más 3 comprobaciones de la demostración sintética y su trazabilidad en GitHub. También se realizaron comprobaciones de importación y compilación. La configuración vacía devuelve correctamente un estado `blocked`, lo que demuestra que el framework no intenta continuar cuando faltan una fuente, columnas, target u horizonte.
 
 ### Responsabilidad sobre el resultado
 
