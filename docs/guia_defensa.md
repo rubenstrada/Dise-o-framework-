@@ -68,3 +68,35 @@ evaluación, reportes y orquestación tienen una primera implementación y prueb
 
 **¿Qué se necesita para continuar?**  Fuente autorizada, diccionario, llave,
 unidad de observación, fechas, target, horizonte, baseline y costo del error.
+
+## Cómo explicar mi participación y el uso de IA
+
+La organización del framework parte de una decisión personal anterior a la
+implementación. En un backend de ERP concentré demasiada lógica en pocos
+archivos, especialmente en `app.py`, y después resultó difícil localizar
+responsabilidades y modificar una parte sin revisar muchas otras. Por eso en
+este proyecto separé carga, validación, limpieza, perfilado, visualización,
+preprocesamiento, modelado y reportes.
+
+La misma decisión se relaciona con una situación que he observado en mi
+trabajo: existen scripts separados para extracción, preparación y limpieza de
+información, y localizar procesos o reutilizar soluciones puede consumir mucho
+tiempo. El proyecto me permitió conectar clases, métodos, modularidad y manejo
+de excepciones con un problema que también aparece fuera del curso.
+
+Codex se utilizó para explorar alternativas, convertir estas decisiones en una
+implementación, generar pruebas y revisar consistencia. Yo definí las
+responsabilidades, los comportamientos que no debían permitirse y las
+condiciones para avanzar. Por ejemplo, decidí que el framework no debía
+inventar columnas, target, horizonte ni resultados, y que una posible
+predicción temporal debía separar pasado y futuro antes del ajuste.
+
+El proceso fue iterativo. La inconsistencia del horizonte se convirtió primero
+en una prueba fallida y después en una corrección del contrato, el YAML y el
+verificador. Esta evidencia permite explicar que la IA funcionó como apoyo
+técnico bajo revisión, no como sustituto de las decisiones ni de la
+responsabilidad del estudiante.
+
+La idea que debo poder defender es sencilla: no basta con que el código
+funcione. Debo explicar por qué existe cada clase, qué recibe cada método, qué
+devuelve y cómo se relaciona con el resto del framework.

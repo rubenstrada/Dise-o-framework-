@@ -64,8 +64,8 @@
 - `compileall` terminó sin errores de sintaxis en `src/`.
 - La CLI conservó el estado `blocked` con los cuatro prerrequisitos faltantes.
 - Se generaron tres visuales propios y se corrigió la legibilidad del diagrama principal después de inspeccionarlo.
-- El documento se convirtió con Microsoft Word a un PDF de 19 páginas y se revisó visualmente página por página.
-- El ZIP final excluye `.venv`, cachés, archivos compilados y metadatos de instalación.
+- El contenido se integró en la plantilla académica final y se revisó visualmente página por página.
+- GitHub quedó establecido como medio de entrega del desarrollo técnico; el repositorio excluye `.venv`, cachés, archivos compilados y datos operativos.
 
 ## Task 9 Visuales reproducibles y evidencia en GitHub
 
@@ -84,3 +84,11 @@
 - Se explicó por qué Pandas conserva la tabla durante el descubrimiento y por qué NumPy se reserva para bloques numéricos y cálculos vectorizados.
 - No se declaró soporte para grandes volúmenes: la implementación actual trabaja en memoria y solo evolucionará si una prueba real excede la memoria o el tiempo acordado.
 - El informe final sustituyó las imágenes por tablas explicativas. Mermaid y el generador Matplotlib quedan en GitHub como material técnico complementario.
+
+## Task 11 Alineación con el documento académico final
+
+- El README se organizó para mostrar la correspondencia directa con los once puntos de la actividad.
+- Se añadió la cuarta visualización propuesta en el documento: comparación de valor real, candidato y baseline.
+- GitHub se documentó como medio de entrega del desarrollo técnico y no solo como enlace complementario.
+- La nota de inteligencia artificial se amplió con la misma narrativa del documento: experiencia previa con un backend de ERP, relación con procesos reales de extracción y limpieza, decisiones técnicas personales, trabajo iterativo con Codex y responsabilidad final del estudiante.
+- No se modificó el código del framework ni se agregaron supuestos sobre datos, columnas, target, horizonte o volumen.
